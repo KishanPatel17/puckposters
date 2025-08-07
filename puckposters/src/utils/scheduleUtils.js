@@ -31,8 +31,11 @@ export function convertScheduleToTimezone(games, timezone, teamCode) {
 
     const isHome = game.homeTeam.abbrev === teamCode;
     const opponent = isHome ? game.awayTeam : game.homeTeam;
-    const opponentName = `${opponent.placeName.default} ${opponent.commonName?.default ?? ""}`.trim();
+    const opponentName = `${opponent.placeName.default} ${
+      opponent.commonName?.default ?? ""
+    }`.trim();
     const opponentLogo = opponent.logo || opponent.darkLogo || null;
+    const abbrev = opponent.abbrev;
 
     return {
       ...game,
@@ -42,6 +45,7 @@ export function convertScheduleToTimezone(games, timezone, teamCode) {
       isHome,
       opponent: opponentName,
       opponentLogo,
+      abbrev,
     };
   });
 }

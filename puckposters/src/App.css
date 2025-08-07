@@ -1,5 +1,26 @@
 /* === GLOBAL === */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap");
+/* ✅ Use local Inter font */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
 
 body {
   margin: 0;

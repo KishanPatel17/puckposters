@@ -174,10 +174,24 @@ function App() {
     }
   };
 
+  const MONTHS = [
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
+  ];
+
   const getMonthLabelFromGameDate = (gameDate) => {
     const d = new Date(gameDate);
-    console.log(d.toLocaleString("en-US", { month: "long" }).toUpperCase());
-    return d.toLocaleString("en-US", { month: "long" }).toUpperCase();
+    return MONTHS[d.getUTCMonth()];
   };
 
   return (
@@ -200,7 +214,9 @@ function App() {
           <option value="America/Chicago">Chicago, Winnipeg (CST)</option>
           <option value="America/Denver">Denver, Edmonton (MST)</option>
           <option value="America/Phoenix">Phoenix (MST, no DST)</option>
-          <option value="America/Los_Angeles">Los Angeles, Vancouver (PST)</option>
+          <option value="America/Los_Angeles">
+            Los Angeles, Vancouver (PST)
+          </option>
           <option value="America/Anchorage">Anchorage (AKST)</option>
           <option value="America/Adak">Adak (HAST)</option>
           <option value="Pacific/Honolulu">Honolulu (HST)</option>
@@ -218,11 +234,12 @@ function App() {
           <option value="Australia/Sydney">Sydney, Melbourne (AEST)</option>
           <option value="Pacific/Auckland">Auckland (NZST)</option>
           <option value="America/Sao_Paulo">São Paulo (BRT)</option>
-          <option value="America/Argentina/Buenos_Aires">Buenos Aires (ART)</option>
+          <option value="America/Argentina/Buenos_Aires">
+            Buenos Aires (ART)
+          </option>
           <option value="Africa/Cairo">Cairo (EET)</option>
           <option value="Africa/Johannesburg">Johannesburg (SAST)</option>
         </select>
-
         <button onClick={fetchSchedule}>Get Schedule</button>
 
         {games.length > 0 && (
