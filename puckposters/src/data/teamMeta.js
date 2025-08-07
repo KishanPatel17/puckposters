@@ -3,7 +3,7 @@ export const teamMeta = {
     name: "Anaheim Ducks",
     bg: "/backgrounds/ana.png",
     primary: "#F47A38",  // TODO: update
-    secondary: "#000"  // TODO: update
+    secondary: "#532A44"  // TODO: update
   },
   BOS: {
     name: "Boston Bruins",
@@ -26,7 +26,7 @@ export const teamMeta = {
   CBJ: {
     name: "Columbus Blue Jackets",
     bg: "/backgrounds/cbj.png",
-    primary: "#0d305bff",  // TODO: update
+    primary: "#01152eff",  // TODO: update
     secondary: "#ce1126"  // TODO: update
   },
   CGY: {
@@ -44,8 +44,8 @@ export const teamMeta = {
   COL: {
     name: "Colorado Avalanche",
     bg: "/backgrounds/col.png",
-    primary: "#6F263D",  // TODO: update
-    secondary: "#A2AAAD"  // TODO: update
+    primary: "#1e54d1ff",  // TODO: update
+    secondary: "#000000"  // TODO: update
   },
   DAL: {
     name: "Dallas Stars",
@@ -75,49 +75,49 @@ export const teamMeta = {
     name: "Los Angeles Kings",
     bg: "/backgrounds/lak.png",
     primary: "#111111",  // TODO: update
-    secondary: "#FFFFFF"  // TODO: update
+    secondary: "#A2AAAD"  // TODO: update
   },
   MIN: {
     name: "Minnesota Wild",
     bg: "/backgrounds/min.png",
-    primary: "#A6192E",  // TODO: update
+    primary: "#154734",  // TODO: update
     secondary: "#EAAA00"  // TODO: update
   },
   MTL: {
     name: "Montreal Canadiens",
     bg: "/backgrounds/mtl.png",
-    primary: "#FFFFFF",  // TODO: update
-    secondary: "#192168"  // TODO: update
+    primary: "#ff0019ff",  // TODO: update
+    secondary: "#040c52ff"  // TODO: update
   },
   NJD: {
     name: "New Jersey Devils",
     bg: "/backgrounds/njd.png",
     primary: "#000000",  // TODO: update
-    secondary: "#FFFFFF"  // TODO: update
+    secondary: "#CE1126"  // TODO: update
   },
   NSH: {
     name: "Nashville Predators",
     bg: "/backgrounds/nsh.png",
-    primary: "#000000",  // TODO: update
+    primary: "#020e8fff",  // TODO: update
     secondary: "#FFB81C"  // TODO: update
   },
   NYI: {
     name: "New York Islanders",
     bg: "/backgrounds/nyi.png",
-    primary: "#FFFFFF",  // TODO: update
-    secondary: "#f47d30"  // TODO: update
+    primary: "#002f9bff",  // TODO: update
+    secondary: "#f55713ff"  // TODO: update
   },
   NYR: {
     name: "New York Rangers",
     bg: "/backgrounds/nyr.png",
-    primary: "#03215eff",  // TODO: update
+    primary: "#090031ff",  // TODO: update
     secondary: "#CE1126"  // TODO: update
   },
   OTT: {
     name: "Ottawa Senators",
     bg: "/backgrounds/ott.png",
     primary: "#000000",  // TODO: update
-    secondary: "#FFFFFF"  // TODO: update
+    secondary: "#DA1A32"  // TODO: update
   },
   PHI: {
     name: "Philadelphia Flyers",
@@ -129,19 +129,19 @@ export const teamMeta = {
     name: "Pittsburgh Penguins",
     bg: "/backgrounds/pit.png",
     primary: "#000000",  // TODO: update
-    secondary: "#FFFFFF"  // TODO: update
+    secondary: "#FCB514"  // TODO: update
   },
   SEA: {
     name: "Seattle Kraken",
     bg: "/backgrounds/sea.png",
     primary: "#000000",  // TODO: update
-    secondary: "#99d9d9"  // TODO: update
+    secondary: "#3a9cbdff"  // TODO: update
   },
   SJS: {
     name: "San Jose Sharks",
     bg: "/backgrounds/sjs.png",
-    primary: "#000000",  // TODO: update
-    secondary: "#FFFFFF"  // TODO: update
+    primary: "#006D75",  // TODO: update
+    secondary: "#000000"  // TODO: update
   },
   STL: {
     name: "St. Louis Blues",
@@ -152,26 +152,26 @@ export const teamMeta = {
   TBL: {
     name: "Tampa Bay Lightning",
     bg: "/backgrounds/tbl.png",
-    primary: "#000000",  // TODO: update
+    primary: "#00205b",  // TODO: update
     secondary: "#FFFFFF"  // TODO: update
   },
   TOR: {
     name: "Toronto Maple Leafs",
     bg: "/backgrounds/tor.png",
-    primary: "#000000",
+    primary: "#00205b",
     secondary: "#FFFFFF"
   },
   UTA: {
     name: "Utah Mammoth",
     bg: "/backgrounds/uta.png",
-    primary: "#000000",  // TODO: update
-    secondary: "#FFFFFF"  // TODO: update
+    primary: "#060442ff",  // TODO: update
+    secondary: "#0072AB"  // TODO: update
   },
   VAN: {
     name: "Vancouver Canucks",
     bg: "/backgrounds/van.png",
     primary: "#00205B",  // TODO: update
-    secondary: "#FFFFFF"  // TODO: update
+    secondary: "#00843d"  // TODO: update
   },
   VGK: {
     name: "Vegas Golden Knights",
@@ -182,13 +182,13 @@ export const teamMeta = {
   WPG: {
     name: "Winnipeg Jets",
     bg: "/backgrounds/wpg.png",
-    primary: "#004C97",  // TODO: update
+    primary: "#041E42",  // TODO: update
     secondary: "#FFFFFF"  // TODO: update
   },
   WSH: {
     name: "Washington Capitals",
     bg: "/backgrounds/wsh.png",
-    primary: "#000000",  // TODO: update
-    secondary: "#ec1c3eff"  // TODO: update
+    primary: "#040442ff",  // TODO: update
+    secondary: "#C8102E"  // TODO: update
   }
 };
