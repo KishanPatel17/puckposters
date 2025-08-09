@@ -137,8 +137,7 @@
 // }
 
 // export default App;
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import { convertScheduleToTimezone } from "./utils/scheduleUtils";
@@ -152,41 +151,46 @@ function App() {
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
 
+  // --- Season months: Sep–Apr only ---
+  const today = new Date();
+  const thisYear = today.getFullYear();
+  const thisMonthNum = today.getMonth() + 1; // 1..12
+  const isInSeasonNow = thisMonthNum >= 9 || thisMonthNum <= 4; // Sep(9)..Apr(4)
+
+  // Season start year: if we're in Sep–Dec, season starts this year; else it started last year
+  const seasonStartYear = thisMonthNum >= 9 ? thisYear : thisYear - 1;
+
+  // Build Sep–Dec of start year + Jan–Apr of next year
+  const buildSeasonMonthOptions = () => {
+    const months = [9, 10, 11, 12, 1, 2, 3, 4];
+    return months.map((m) => {
+      const year = m >= 9 ? seasonStartYear : seasonStartYear + 1;
+      const value = `${year}-${String(m).padStart(2, "0")}`;
+      const label = new Date(year, m - 1, 1).toLocaleString("en-US", {
+        month: "long",
+        year: "numeric",
+      });
+      return { value, label };
+    });
+  };
+  const monthOptions = buildSeasonMonthOptions();
+
+  // Default month: 'now' if in-season; otherwise September of seasonStartYear
+  const defaultMonth = isInSeasonNow
+    ? "now"
+    : `${seasonStartYear}-09`;
+  const [month, setMonth] = useState(defaultMonth); // "now" or "YYYY-MM"
+
+  // Build team options from meta
   const teamOptions = Object.entries(teamMeta).map(([code, data]) => ({
     code,
     name: data.name,
   }));
 
-  const fetchSchedule = async () => {
-    try {
-      const res = await axios.get(
-        `https://corsproxy.io/?https://api-web.nhle.com/v1/club-schedule/${teamCode}/month/2025-10`
-      );
-      const rawSchedule = res.data.games;
-      const convertedSchedule = convertScheduleToTimezone(
-        rawSchedule,
-        timezone,
-        teamCode
-      );
-      setGames(convertedSchedule);
-    } catch (err) {
-      console.error("Error fetching schedule:", err);
-    }
-  };
-
+  // Month label helpers (avoid TZ drift)
   const MONTHS = [
-    "JANUARY",
-    "FEBRUARY",
-    "MARCH",
-    "APRIL",
-    "MAY",
-    "JUNE",
-    "JULY",
-    "AUGUST",
-    "SEPTEMBER",
-    "OCTOBER",
-    "NOVEMBER",
-    "DECEMBER",
+    "JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE",
+    "JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER",
   ];
 
   const getMonthLabelFromGameDate = (gameDate) => {
@@ -194,11 +198,44 @@ function App() {
     return MONTHS[d.getUTCMonth()];
   };
 
+  const getMonthLabelFromValue = (ym) => {
+    const [, mm] = ym.split("-");
+    return MONTHS[Number(mm) - 1];
+  };
+
+  const fetchSchedule = async () => {
+    try {
+      const monthSegment = month === "now" ? "now" : month; // 'now' or 'YYYY-MM'
+      const url = `https://corsproxy.io/?https://api-web.nhle.com/v1/club-schedule/${teamCode}/month/${monthSegment}`;
+      const res = await axios.get(url);
+      const raw = res.data.games || [];
+      const converted = convertScheduleToTimezone(raw, timezone, teamCode);
+      setGames(converted);
+    } catch (err) {
+      console.error("Error fetching schedule:", err);
+    }
+  };
+
+  // Auto-fetch when team/month/timezone changes
+  useEffect(() => {
+    fetchSchedule();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teamCode, month, timezone]);
+
+  // Poster header label
+  const monthLabel =
+    month !== "now"
+      ? getMonthLabelFromValue(month)
+      : games[0]
+      ? getMonthLabelFromGameDate(games[0].gameDate)
+      : "";
+
   return (
     <div className="App">
       <div className="container">
         <h1>PuckPosters 🏒</h1>
 
+        {/* Team selector */}
         <select value={teamCode} onChange={(e) => setTeamCode(e.target.value)}>
           {teamOptions.map((team) => (
             <option key={team.code} value={team.code}>
@@ -207,6 +244,17 @@ function App() {
           ))}
         </select>
 
+        {/* Month selector (Sep–Apr only) */}
+        <select value={month} onChange={(e) => setMonth(e.target.value)}>
+          {isInSeasonNow && <option value="now">Current Month (auto)</option>}
+          {monthOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+
+        {/* Timezone selector */}
         <select value={timezone} onChange={(e) => setTimezone(e.target.value)}>
           <option value="America/St_Johns">Newfoundland (NST)</option>
           <option value="America/Halifax">Halifax (AST)</option>
@@ -214,9 +262,7 @@ function App() {
           <option value="America/Chicago">Chicago, Winnipeg (CST)</option>
           <option value="America/Denver">Denver, Edmonton (MST)</option>
           <option value="America/Phoenix">Phoenix (MST, no DST)</option>
-          <option value="America/Los_Angeles">
-            Los Angeles, Vancouver (PST)
-          </option>
+          <option value="America/Los_Angeles">Los Angeles, Vancouver (PST)</option>
           <option value="America/Anchorage">Anchorage (AKST)</option>
           <option value="America/Adak">Adak (HAST)</option>
           <option value="Pacific/Honolulu">Honolulu (HST)</option>
@@ -234,19 +280,19 @@ function App() {
           <option value="Australia/Sydney">Sydney, Melbourne (AEST)</option>
           <option value="Pacific/Auckland">Auckland (NZST)</option>
           <option value="America/Sao_Paulo">São Paulo (BRT)</option>
-          <option value="America/Argentina/Buenos_Aires">
-            Buenos Aires (ART)
-          </option>
+          <option value="America/Argentina/Buenos_Aires">Buenos Aires (ART)</option>
           <option value="Africa/Cairo">Cairo (EET)</option>
           <option value="Africa/Johannesburg">Johannesburg (SAST)</option>
         </select>
+
+        {/* Button optional now that it auto-fetches */}
         <button onClick={fetchSchedule}>Get Schedule</button>
 
         {games.length > 0 && (
           <PosterPreview
             teamCode={teamCode}
             games={games}
-            monthLabel={getMonthLabelFromGameDate(games[0].gameDate)}
+            monthLabel={monthLabel}
           />
         )}
       </div>

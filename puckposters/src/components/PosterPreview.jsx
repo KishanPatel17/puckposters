@@ -17,20 +17,31 @@ function PosterPreview({ teamCode, games, monthLabel }) {
     return `/logos/${teamCode}.${teamCode === "UTA" ? "png" : "svg"}`;
   }
 
-  const handleExport = () => {
+  const handleExport = async () => {
     const node = document.getElementById("poster-export-target");
 
-    toPng(node, { cacheBust: true })
-      .then((dataUrl) => {
-        download(dataUrl, `${teamCode}_${monthLabel}.png`);
-      })
-      .catch((err) => {
-        console.error("Export failed:", err);
-      });
+    // Make sure fonts/images are ready so text doesn't render fuzzy/misaligned
+    try {
+      if (document.fonts?.ready) await document.fonts.ready;
+    } catch {}
+    await new Promise((r) => requestAnimationFrame(r)); // settle layout one frame
+
+    const dataUrl = await toPng(node, {
+      cacheBust: true,
+      width: 1080,
+      height: 1920,
+      pixelRatio: 2,
+    });
+
+    download(
+      dataUrl,
+      `${teamCode}-${monthLabel.replace(/\s+/g, "")}.png`
+    );
   };
 
   return (
     <div id="poster-preview">
+      <button onClick={handleExport}>🗃️ Download Poster</button>
       <div className="poster-wrapper" id="poster-export-target">
         {/* Background image */}
         <img
@@ -83,8 +94,10 @@ function PosterPreview({ teamCode, games, monthLabel }) {
             })}
           </div>
         </div>
+        <div className="poster-footer">
+          <span>puckposters.com | generated with ❤️</span>
+        </div>
       </div>
-      <button onClick={handleExport}>🗃️ Download Poster</button>
     </div>
   );
 }
