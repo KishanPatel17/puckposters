@@ -152,33 +152,35 @@ function App() {
   );
 
   // --- Season months: Sep–Apr only ---
-  const today = new Date();
-  const thisYear = today.getFullYear();
-  const thisMonthNum = today.getMonth() + 1; // 1..12
-  const isInSeasonNow = thisMonthNum >= 9 || thisMonthNum <= 4; // Sep(9)..Apr(4)
+  // AFTER
+const today = new Date();
+const thisYear = today.getFullYear();
+const thisMonthNum = today.getMonth() + 1; // 1..12
+const isInSeasonNow = thisMonthNum >= 9 || thisMonthNum <= 4; // Sep..Apr
 
-  // Season start year: if we're in Sep–Dec, season starts this year; else it started last year
-  const seasonStartYear = thisMonthNum >= 9 ? thisYear : thisYear - 1;
+// If in season: start = thisYear (Sep–Dec) or lastYear (Jan–Apr path).
+// If out of season (May–Aug): start = THIS YEAR (upcoming season).
+const seasonStartYear = isInSeasonNow
+  ? (thisMonthNum >= 9 ? thisYear : thisYear - 1)
+  : thisYear;
 
-  // Build Sep–Dec of start year + Jan–Apr of next year
-  const buildSeasonMonthOptions = () => {
-    const months = [9, 10, 11, 12, 1, 2, 3, 4];
-    return months.map((m) => {
-      const year = m >= 9 ? seasonStartYear : seasonStartYear + 1;
-      const value = `${year}-${String(m).padStart(2, "0")}`;
-      const label = new Date(year, m - 1, 1).toLocaleString("en-US", {
-        month: "long",
-        year: "numeric",
-      });
-      return { value, label };
+const buildSeasonMonthOptions = (startYear) => {
+  const months = [9, 10, 11, 12, 1, 2, 3, 4];
+  return months.map((m) => {
+    const year = m >= 9 ? startYear : startYear + 1;
+    const value = `${year}-${String(m).padStart(2, "0")}`;
+    const label = new Date(year, m - 1, 1).toLocaleString("en-US", {
+      month: "long",
+      year: "numeric",
     });
-  };
-  const monthOptions = buildSeasonMonthOptions();
+    return { value, label };
+  });
+};
+const monthOptions = buildSeasonMonthOptions(seasonStartYear);
 
-  // Default month: 'now' if in-season; otherwise September of seasonStartYear
-  const defaultMonth = isInSeasonNow
-    ? "now"
-    : `${seasonStartYear}-09`;
+// Default: 'now' if in-season; otherwise September of the UPCOMING season
+const defaultMonth = isInSeasonNow ? "now" : `${seasonStartYear}-09`;
+
   const [month, setMonth] = useState(defaultMonth); // "now" or "YYYY-MM"
 
   // Build team options from meta
