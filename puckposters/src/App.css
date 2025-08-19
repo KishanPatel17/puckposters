@@ -28,14 +28,20 @@ body {
 }
 
 /* === MAIN APP WRAPPER === */
+/* === MAIN APP WRAPPER === */
 .App {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 2rem;
+  align-items: center;     /* centers left-to-right */
+  justify-content: flex-start; /* centers top-to-bottom */
+  width: 100%;             /* full width */
   box-sizing: border-box;
+  text-align: center;      /* optional: center text as well */
+}
+
+
+body {
+  background: linear-gradient(180deg, #fafafa, #eaeaea);
 }
 
 /* === TITLE === */
@@ -84,6 +90,8 @@ button:hover, select:hover {
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,0.4);
   font-family: "Inter", sans-serif;
+  transform: scale(0.4);
+  transform-origin: top left;
 }
 .poster-wrapper img.poster-bg {
   position: absolute;

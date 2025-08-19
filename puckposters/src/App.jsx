@@ -136,7 +136,7 @@
 //   );
 // }
 
-// 
+//
 // export default App;
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -154,33 +154,36 @@ function App() {
 
   // --- Season months: Sep–Apr only ---
   // AFTER
-const today = new Date();
-const thisYear = today.getFullYear();
-const thisMonthNum = today.getMonth() + 1; // 1..12
-const isInSeasonNow = thisMonthNum >= 9 || thisMonthNum <= 4; // Sep..Apr
+  const today = new Date();
+  const thisYear = today.getFullYear();
+  const thisMonthNum = today.getMonth() + 1; // 1..12
+  const isInSeasonNow = thisMonthNum >= 9 || thisMonthNum <= 4; // Sep..Apr
 
-// If in season: start = thisYear (Sep–Dec) or lastYear (Jan–Apr path).
-// If out of season (May–Aug): start = THIS YEAR (upcoming season).
-const seasonStartYear = isInSeasonNow
-  ? (thisMonthNum >= 9 ? thisYear : thisYear - 1)
-  : thisYear;
+  // If in season: start = thisYear (Sep–Dec) or lastYear (Jan–Apr path).
+  // If out of season (May–Aug): start = THIS YEAR (upcoming season).
 
-const buildSeasonMonthOptions = (startYear) => {
-  const months = [9, 10, 11, 12, 1, 2, 3, 4];
-  return months.map((m) => {
-    const year = m >= 9 ? startYear : startYear + 1;
-    const value = `${year}-${String(m).padStart(2, "0")}`;
-    const label = new Date(year, m - 1, 1).toLocaleString("en-US", {
-      month: "long",
-      year: "numeric",
+  const seasonStartYear = isInSeasonNow
+    ? thisMonthNum >= 9
+      ? thisYear
+      : thisYear - 1
+    : thisYear;
+
+  const buildSeasonMonthOptions = (startYear) => {
+    const months = [9, 10, 11, 12, 1, 2, 3, 4];
+    return months.map((m) => {
+      const year = m >= 9 ? startYear : startYear + 1;
+      const value = `${year}-${String(m).padStart(2, "0")}`;
+      const label = new Date(year, m - 1, 1).toLocaleString("en-US", {
+        month: "long",
+        year: "numeric",
+      });
+      return { value, label };
     });
-    return { value, label };
-  });
-};
-const monthOptions = buildSeasonMonthOptions(seasonStartYear);
+  };
+  const monthOptions = buildSeasonMonthOptions(seasonStartYear);
 
-// Default: 'now' if in-season; otherwise September of the UPCOMING season
-const defaultMonth = isInSeasonNow ? "now" : `${seasonStartYear}-09`;
+  // Default: 'now' if in-season; otherwise September of the UPCOMING season
+  const defaultMonth = isInSeasonNow ? "now" : `${seasonStartYear}-09`;
 
   const [month, setMonth] = useState(defaultMonth); // "now" or "YYYY-MM"
 
@@ -192,8 +195,18 @@ const defaultMonth = isInSeasonNow ? "now" : `${seasonStartYear}-09`;
 
   // Month label helpers (avoid TZ drift)
   const MONTHS = [
-    "JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE",
-    "JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER",
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
   ];
 
   const getMonthLabelFromGameDate = (gameDate) => {
@@ -237,59 +250,70 @@ const defaultMonth = isInSeasonNow ? "now" : `${seasonStartYear}-09`;
     <div className="App">
       <div className="container">
         <h1>PuckPosters 🏒</h1>
+        <div className="controls">
+          {/* Team selector */}
+          <select
+            value={teamCode}
+            onChange={(e) => setTeamCode(e.target.value)}
+          >
+            {teamOptions.map((team) => (
+              <option key={team.code} value={team.code}>
+                {team.name}
+              </option>
+            ))}
+          </select>
 
-        {/* Team selector */}
-        <select value={teamCode} onChange={(e) => setTeamCode(e.target.value)}>
-          {teamOptions.map((team) => (
-            <option key={team.code} value={team.code}>
-              {team.name}
+          {/* Month selector (Sep–Apr only) */}
+          <select value={month} onChange={(e) => setMonth(e.target.value)}>
+            {isInSeasonNow && <option value="now">Current Month (auto)</option>}
+            {monthOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+
+          {/* Timezone selector */}
+          <select
+            value={timezone}
+            onChange={(e) => setTimezone(e.target.value)}
+          >
+            <option value="America/St_Johns">Newfoundland (NST)</option>
+            <option value="America/Halifax">Halifax (AST)</option>
+            <option value="America/Toronto">New York, Toronto (EST)</option>
+            <option value="America/Chicago">Chicago, Winnipeg (CST)</option>
+            <option value="America/Denver">Denver, Edmonton (MST)</option>
+            <option value="America/Phoenix">Phoenix (MST, no DST)</option>
+            <option value="America/Los_Angeles">
+              Los Angeles, Vancouver (PST)
             </option>
-          ))}
-        </select>
-
-        {/* Month selector (Sep–Apr only) */}
-        <select value={month} onChange={(e) => setMonth(e.target.value)}>
-          {isInSeasonNow && <option value="now">Current Month (auto)</option>}
-          {monthOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
+            <option value="America/Anchorage">Anchorage (AKST)</option>
+            <option value="America/Adak">Adak (HAST)</option>
+            <option value="Pacific/Honolulu">Honolulu (HST)</option>
+            <option value="Europe/London">London (GMT)</option>
+            <option value="Europe/Paris">Paris, Berlin, Madrid (CET)</option>
+            <option value="Europe/Helsinki">Helsinki, Riga (EET)</option>
+            <option value="Europe/Moscow">Moscow (MSK)</option>
+            <option value="Asia/Dubai">Dubai (GST)</option>
+            <option value="Asia/Kolkata">Delhi, Kolkata (IST)</option>
+            <option value="Asia/Shanghai">Shanghai, Singapore (CST)</option>
+            <option value="Asia/Tokyo">Tokyo (JST)</option>
+            <option value="Asia/Seoul">Seoul (KST)</option>
+            <option value="Australia/Perth">Perth (AWST)</option>
+            <option value="Australia/Adelaide">Adelaide (ACST)</option>
+            <option value="Australia/Sydney">Sydney, Melbourne (AEST)</option>
+            <option value="Pacific/Auckland">Auckland (NZST)</option>
+            <option value="America/Sao_Paulo">São Paulo (BRT)</option>
+            <option value="America/Argentina/Buenos_Aires">
+              Buenos Aires (ART)
             </option>
-          ))}
-        </select>
+            <option value="Africa/Cairo">Cairo (EET)</option>
+            <option value="Africa/Johannesburg">Johannesburg (SAST)</option>
+          </select>
 
-        {/* Timezone selector */}
-        <select value={timezone} onChange={(e) => setTimezone(e.target.value)}>
-          <option value="America/St_Johns">Newfoundland (NST)</option>
-          <option value="America/Halifax">Halifax (AST)</option>
-          <option value="America/Toronto">New York, Toronto (EST)</option>
-          <option value="America/Chicago">Chicago, Winnipeg (CST)</option>
-          <option value="America/Denver">Denver, Edmonton (MST)</option>
-          <option value="America/Phoenix">Phoenix (MST, no DST)</option>
-          <option value="America/Los_Angeles">Los Angeles, Vancouver (PST)</option>
-          <option value="America/Anchorage">Anchorage (AKST)</option>
-          <option value="America/Adak">Adak (HAST)</option>
-          <option value="Pacific/Honolulu">Honolulu (HST)</option>
-          <option value="Europe/London">London (GMT)</option>
-          <option value="Europe/Paris">Paris, Berlin, Madrid (CET)</option>
-          <option value="Europe/Helsinki">Helsinki, Riga (EET)</option>
-          <option value="Europe/Moscow">Moscow (MSK)</option>
-          <option value="Asia/Dubai">Dubai (GST)</option>
-          <option value="Asia/Kolkata">Delhi, Kolkata (IST)</option>
-          <option value="Asia/Shanghai">Shanghai, Singapore (CST)</option>
-          <option value="Asia/Tokyo">Tokyo (JST)</option>
-          <option value="Asia/Seoul">Seoul (KST)</option>
-          <option value="Australia/Perth">Perth (AWST)</option>
-          <option value="Australia/Adelaide">Adelaide (ACST)</option>
-          <option value="Australia/Sydney">Sydney, Melbourne (AEST)</option>
-          <option value="Pacific/Auckland">Auckland (NZST)</option>
-          <option value="America/Sao_Paulo">São Paulo (BRT)</option>
-          <option value="America/Argentina/Buenos_Aires">Buenos Aires (ART)</option>
-          <option value="Africa/Cairo">Cairo (EET)</option>
-          <option value="Africa/Johannesburg">Johannesburg (SAST)</option>
-        </select>
-
-        {/* Button optional now that it auto-fetches */}
-        <button onClick={fetchSchedule}>Get Schedule</button>
+          {/* Button optional now that it auto-fetches */}
+          <button onClick={fetchSchedule}>Get Schedule</button>
+        </div>
 
         {games.length > 0 && (
           <PosterPreview
