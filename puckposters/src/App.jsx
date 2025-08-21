@@ -144,6 +144,8 @@ import "./App.css";
 import { convertScheduleToTimezone } from "./utils/scheduleUtils";
 import PosterPreview from "./components/PosterPreview";
 import { teamMeta } from "./data/teamMeta";
+import { toPng } from "html-to-image";
+import download from "downloadjs";
 
 function App() {
   const [teamCode, setTeamCode] = useState("TOR");
@@ -246,27 +248,37 @@ function App() {
       ? getMonthLabelFromGameDate(games[0].gameDate)
       : "";
 
+  const handleExport = async () => {
+    const node = document.getElementById("poster-export-target");
+
+    // Make sure fonts/images are ready so text doesn't render fuzzy/misaligned
+    try {
+      if (document.fonts?.ready) await document.fonts.ready;
+    } catch {}
+    await new Promise((r) => requestAnimationFrame(r)); // settle layout one frame
+
+    const dataUrl = await toPng(node, {
+      cacheBust: true,
+      width: 1080,
+      height: 1920,
+      pixelRatio: 2,
+    });
+
+    download(dataUrl, `${teamCode}-${monthLabel.replace(/\s+/g, "")}.png`);
+  };
+
   return (
     <>
-      {/* Navbar */}
-      <nav
-        className="navbar navbar-expand-md bg-body-tertiary mb-4"
-        data-bs-theme="dark"
-      >
-        <div className="container-fluid">
-          <a className="navbar-brand fw-bold" href="#">
-            PuckPosters
-          </a>
-        </div>
-      </nav>
-
       {/* Main layout */}
       <main className="container">
-        <div className="row g-4 align-items-start justify-content-center">
+        <div className="row g-4 align-items-start justify-content-center mt-1">
           {/* Controls column */}
           <div className="col-auto">
             <div className="card shadow-sm">
               <div className="card-body">
+
+                <h1 id="puckposters-title" className="h4 btn btn-dark mb-3">PUCKPOSTERS 🏒</h1>
+
                 <h2 className="h5 mb-3">Generate</h2>
 
                 {/* Team selector */}
@@ -363,6 +375,15 @@ function App() {
                     </option>
                   </select>
                 </div>
+
+                {/* Export Button */}
+                <button
+                  id="export-btn"
+                  className="btn btn-dark mb-3"
+                  onClick={handleExport}
+                >
+                  🗃️ Download Poster
+                </button>
               </div>
             </div>
           </div>

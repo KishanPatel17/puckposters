@@ -16,15 +16,16 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: radial-gradient(
+  /* background: radial-gradient(
       1100px 520px at 20% -10%,
-      rgba(99, 102, 241, 0.15),
+      rgba(99, 102, 241),
       transparent
     ),
     radial-gradient(
       900px 480px at 120% 20%,
-      rgba(56, 189, 248, 0.12),
+      rgba(56, 189, 248),
       transparent
-    );
+    ); */
+  background: rgb(17, 24, 39);
   pointer-events: none;
 }

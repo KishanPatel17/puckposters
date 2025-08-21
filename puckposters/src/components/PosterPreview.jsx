@@ -40,9 +40,7 @@ function PosterPreview({ teamCode, games, monthLabel }) {
   };
 
   return (
-    <div id="poster-preview">
-      <button className="btn btn-dark mb-3 d-flex justify-content-center" onClick={handleExport}>🗃️ Download Poster</button>
-      
+    <div id="poster-preview">      
       <div className="poster-frame">
         <div className="poster-wrapper" id="poster-export-target">
           {/* Background image */}
