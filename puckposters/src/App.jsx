@@ -247,83 +247,141 @@ function App() {
       : "";
 
   return (
-    <div className="App">
-      <div className="container">
-        <h1>PuckPosters 🏒</h1>
-        <div className="controls">
-          {/* Team selector */}
-          <select
-            value={teamCode}
-            onChange={(e) => setTeamCode(e.target.value)}
-          >
-            {teamOptions.map((team) => (
-              <option key={team.code} value={team.code}>
-                {team.name}
-              </option>
-            ))}
-          </select>
-
-          {/* Month selector (Sep–Apr only) */}
-          <select value={month} onChange={(e) => setMonth(e.target.value)}>
-            {isInSeasonNow && <option value="now">Current Month (auto)</option>}
-            {monthOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-
-          {/* Timezone selector */}
-          <select
-            value={timezone}
-            onChange={(e) => setTimezone(e.target.value)}
-          >
-            <option value="America/St_Johns">Newfoundland (NST)</option>
-            <option value="America/Halifax">Halifax (AST)</option>
-            <option value="America/Toronto">New York, Toronto (EST)</option>
-            <option value="America/Chicago">Chicago, Winnipeg (CST)</option>
-            <option value="America/Denver">Denver, Edmonton (MST)</option>
-            <option value="America/Phoenix">Phoenix (MST, no DST)</option>
-            <option value="America/Los_Angeles">
-              Los Angeles, Vancouver (PST)
-            </option>
-            <option value="America/Anchorage">Anchorage (AKST)</option>
-            <option value="America/Adak">Adak (HAST)</option>
-            <option value="Pacific/Honolulu">Honolulu (HST)</option>
-            <option value="Europe/London">London (GMT)</option>
-            <option value="Europe/Paris">Paris, Berlin, Madrid (CET)</option>
-            <option value="Europe/Helsinki">Helsinki, Riga (EET)</option>
-            <option value="Europe/Moscow">Moscow (MSK)</option>
-            <option value="Asia/Dubai">Dubai (GST)</option>
-            <option value="Asia/Kolkata">Delhi, Kolkata (IST)</option>
-            <option value="Asia/Shanghai">Shanghai, Singapore (CST)</option>
-            <option value="Asia/Tokyo">Tokyo (JST)</option>
-            <option value="Asia/Seoul">Seoul (KST)</option>
-            <option value="Australia/Perth">Perth (AWST)</option>
-            <option value="Australia/Adelaide">Adelaide (ACST)</option>
-            <option value="Australia/Sydney">Sydney, Melbourne (AEST)</option>
-            <option value="Pacific/Auckland">Auckland (NZST)</option>
-            <option value="America/Sao_Paulo">São Paulo (BRT)</option>
-            <option value="America/Argentina/Buenos_Aires">
-              Buenos Aires (ART)
-            </option>
-            <option value="Africa/Cairo">Cairo (EET)</option>
-            <option value="Africa/Johannesburg">Johannesburg (SAST)</option>
-          </select>
-
-          {/* Button optional now that it auto-fetches */}
-          <button onClick={fetchSchedule}>Get Schedule</button>
+    <>
+      {/* Navbar */}
+      <nav
+        className="navbar navbar-expand-md bg-body-tertiary mb-4"
+        data-bs-theme="dark"
+      >
+        <div className="container-fluid">
+          <a className="navbar-brand fw-bold" href="#">
+            PuckPosters
+          </a>
         </div>
+      </nav>
 
-        {games.length > 0 && (
-          <PosterPreview
-            teamCode={teamCode}
-            games={games}
-            monthLabel={monthLabel}
-          />
-        )}
-      </div>
-    </div>
+      {/* Main layout */}
+      <main className="container">
+        <div className="row g-4 align-items-start justify-content-center">
+          {/* Controls column */}
+          <div className="col-auto">
+            <div className="card shadow-sm">
+              <div className="card-body">
+                <h2 className="h5 mb-3">Generate</h2>
+
+                {/* Team selector */}
+                <div className="mb-3">
+                  <label className="form-label">Team</label>
+                  <select
+                    className="form-select"
+                    value={teamCode}
+                    onChange={(e) => setTeamCode(e.target.value)}
+                  >
+                    {teamOptions.map((team) => (
+                      <option key={team.code} value={team.code}>
+                        {team.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Month selector */}
+                <div className="mb-3">
+                  <label className="form-label">Month</label>
+                  <select
+                    className="form-select"
+                    value={month}
+                    onChange={(e) => setMonth(e.target.value)}
+                  >
+                    {isInSeasonNow && (
+                      <option value="now">Current Month (auto)</option>
+                    )}
+                    {monthOptions.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Timezone selector */}
+                <div className="mb-3">
+                  <label className="form-label">Timezone</label>
+                  <select
+                    className="form-select"
+                    value={timezone}
+                    onChange={(e) => setTimezone(e.target.value)}
+                  >
+                    <option value="America/St_Johns">Newfoundland (NST)</option>
+                    <option value="America/Halifax">Halifax (AST)</option>
+                    <option value="America/Toronto">
+                      New York, Toronto (EST)
+                    </option>
+                    <option value="America/Chicago">
+                      Chicago, Winnipeg (CST)
+                    </option>
+                    <option value="America/Denver">
+                      Denver, Edmonton (MST)
+                    </option>
+                    <option value="America/Phoenix">
+                      Phoenix (MST, no DST)
+                    </option>
+                    <option value="America/Los_Angeles">
+                      Los Angeles, Vancouver (PST)
+                    </option>
+                    <option value="America/Anchorage">Anchorage (AKST)</option>
+                    <option value="America/Adak">Adak (HAST)</option>
+                    <option value="Pacific/Honolulu">Honolulu (HST)</option>
+                    <option value="Europe/London">London (GMT)</option>
+                    <option value="Europe/Paris">
+                      Paris, Berlin, Madrid (CET)
+                    </option>
+                    <option value="Europe/Helsinki">
+                      Helsinki, Riga (EET)
+                    </option>
+                    <option value="Europe/Moscow">Moscow (MSK)</option>
+                    <option value="Asia/Dubai">Dubai (GST)</option>
+                    <option value="Asia/Kolkata">Delhi, Kolkata (IST)</option>
+                    <option value="Asia/Shanghai">
+                      Shanghai, Singapore (CST)
+                    </option>
+                    <option value="Asia/Tokyo">Tokyo (JST)</option>
+                    <option value="Asia/Seoul">Seoul (KST)</option>
+                    <option value="Australia/Perth">Perth (AWST)</option>
+                    <option value="Australia/Adelaide">Adelaide (ACST)</option>
+                    <option value="Australia/Sydney">
+                      Sydney, Melbourne (AEST)
+                    </option>
+                    <option value="Pacific/Auckland">Auckland (NZST)</option>
+                    <option value="America/Sao_Paulo">São Paulo (BRT)</option>
+                    <option value="America/Argentina/Buenos_Aires">
+                      Buenos Aires (ART)
+                    </option>
+                    <option value="Africa/Cairo">Cairo (EET)</option>
+                    <option value="Africa/Johannesburg">
+                      Johannesburg (SAST)
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Poster column */}
+          <div className="col-auto d-flex justify-content-center">
+            {games.length > 0 && (
+              <div className="poster-guard">
+                <PosterPreview
+                  teamCode={teamCode}
+                  games={games}
+                  monthLabel={monthLabel}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+    </>
   );
 }
 

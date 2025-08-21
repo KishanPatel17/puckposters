@@ -1,87 +1,44 @@
-/* === GLOBAL === */
-/* Use local Inter font */
+/* === LOCAL INTER (unchanged) === */
 @font-face {
   font-family: 'Inter';
   src: url('/fonts/Inter-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
+  font-weight: 400; font-style: normal;
 }
 @font-face {
   font-family: 'Inter';
   src: url('/fonts/Inter-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
+  font-weight: 700; font-style: normal;
 }
 @font-face {
   font-family: 'Inter';
   src: url('/fonts/Inter-ExtraBold.ttf') format('truetype');
-  font-weight: 800;
-  font-style: normal;
+  font-weight: 800; font-style: normal;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-  font-family: "Inter", sans-serif;
-  color: #222;
+/* Make the left control card sticky on desktop (nice UX) */
+@media (min-width: 992px) {
+  .pp-sticky { position: sticky; top: 1.25rem; }
 }
 
-/* === MAIN APP WRAPPER === */
-/* === MAIN APP WRAPPER === */
-.App {
-  display: flex;
-  flex-direction: column;
-  align-items: center;     /* centers left-to-right */
-  justify-content: flex-start; /* centers top-to-bottom */
-  width: 100%;             /* full width */
-  box-sizing: border-box;
-  text-align: center;      /* optional: center text as well */
+/* ---------- SANDBOX: prevent Bootstrap from leaking into poster ---------- */
+.poster-guard * {
+  all: revert;                          /* reset everything inside poster subtree */
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  display: block;
 }
 
+/* ---- Scale variable (controls on-page size) ---- */
+:root { --pp-scale: 0.36; }  /* tweak this to taste */
 
-body {
-  background: linear-gradient(180deg, #fafafa, #eaeaea);
-}
-
-/* === TITLE === */
-h1 {
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-}
-h1::after {
-  content: " 🏒";
-  animation: bounce 1s infinite ease-in-out;
-}
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50%     { transform: translateY(-4px); }
+/* The frame defines the *layout* size (shrinks the column) */
+.poster-frame {
+  width: calc(1080px * var(--pp-scale));
+  height: calc(1920px * var(--pp-scale));
+  /* prevent inline layout artifacts */
+  display: block;
 }
 
-/* === FORM CONTROLS === */
-select, button {
-  font-size: 1rem;
-  margin: 1rem 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: none;
-  background: #fff;
-  color: #222;
-  font-weight: 500;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
-select option {
-  background: #fff;
-  color: #222;
-}
-button:hover, select:hover {
-  background: #eee;
-  transform: translateY(-1px);
-}
-
-/* === POSTER WRAPPER (1080×1920) === */
+/* Keep the real poster at 1080×1920, but visually scale it */
 .poster-wrapper {
   position: relative;
   width: 1080px;
@@ -90,112 +47,68 @@ button:hover, select:hover {
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,0.4);
   font-family: "Inter", sans-serif;
-  transform: scale(0.4);
+  transform: scale(var(--pp-scale));
   transform-origin: top left;
+  display: block;
 }
+
+/* (Optional) responsive scale presets */
+@media (min-width: 1400px) { :root { --pp-scale: 0.46; } }
+@media (min-width: 1200px) and (max-width: 1399.98px) { :root { --pp-scale: 0.42; } }
+@media (min-width: 992px) and (max-width: 1199.98px)  { :root { --pp-scale: 0.36; } }
+@media (min-width: 768px) and (max-width: 991.98px)   { :root { --pp-scale: 0.32; } }
+@media (max-width: 767.98px)                           { :root { --pp-scale: 0.28; } }
+
+/* Background image */
 .poster-wrapper img.poster-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; z-index: 0;
 }
 
 /* === BOTTOM OVERLAY === */
 .poster-bottom {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 1rem 2rem 320px;  /* more bottom padding for nav bar */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  position: absolute; bottom: 0; width: 100%;
+  padding: 1rem 2rem 320px;  /* extra bottom for iPhone nav */
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
   background: none;
 }
 
 .poster-bottom.updated-layout {
-  position: absolute;
-  bottom: 0;
-  left: 0;          /* pin to left edge of wrapper */
-  width: 1080px;    /* exact match to wrapper */
-  padding: 1rem 2rem 320px; /* keep your horizontal pad */
-  box-sizing: border-box;   /* include padding in that 1080px */
+  left: 0; width: 1080px; box-sizing: border-box;
 }
-
 
 /* === MONTH + LEGEND ROW === */
-.poster-month-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;  /* increased gap */
-}
+.poster-month-row { display: flex; align-items: center; gap: 1rem; }
 .poster-month-pill {
-  padding: 0.6rem 1.2rem;
-  background: rgba(255,255,255,0.9);
-  color: #000;
-  font-weight: 900;
-  font-size: 1.5rem;
-  border-radius: 8px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  padding: .6rem 1.2rem; background: rgba(255,255,255,.9); color: #000;
+  font-weight: 900; font-size: 1.5rem; border-radius: 8px;
+  text-transform: uppercase; letter-spacing: 1px;
 }
 .poster-legend-chip {
-  padding: 0.5rem 1rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  border-radius: 6px;
-  white-space: nowrap;
+  padding: .5rem 1rem; font-size: 1.5rem; font-weight: 700; border-radius: 6px; white-space: nowrap;
 }
 
 /* === GAMES GRID (7 columns) === */
 .poster-game-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 16px;
-  width: 100%;
-  box-sizing: border-box;
-  justify-items: center;
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 16px; width: 100%; box-sizing: border-box; justify-items: center;
 }
 
 /* === GAME TILES === */
 .poster-game-tile {
-  width: 100%;
-  padding: 16px;
-  border-radius: 12px;
+  width: 100%; padding: 16px; border-radius: 12px;
   background: rgba(255,255,255,0.9);
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  line-height: 1.2;
-  box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-size: 12px; line-height: 1.2; box-sizing: border-box;
 }
-.poster-game-tile img {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 8px;
-}
-.poster-game-date {
-  font-weight: 700;
-  font-size: 16px;
-  margin-bottom: 6px;
-}
-.poster-game-time {
-  font-size: 15px;
-  opacity: 0.8;
-}
+.poster-game-tile img { width: 48px; height: 48px; margin-bottom: 8px; }
+.poster-game-date { font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.poster-game-time { font-size: 15px; opacity: .8; }
 
 /* === FOOTER === */
 .poster-footer {
-  position: absolute;
-  bottom: 3rem;
-  width: 100%;
-  text-align: center;
-  font-size: 15px;
-  opacity: 0.6;
-  color: #fff;
+  position: absolute; bottom: 3rem; width: 100%; text-align: center;
+  font-size: 15px; opacity: .6; color: #fff;
 }
