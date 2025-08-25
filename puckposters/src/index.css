@@ -26,6 +26,40 @@ body::before {
       rgba(56, 189, 248),
       transparent
     ); */
-  background: rgb(17, 24, 39);
+  /* background: rgb(17, 24, 39); */
+  background: #0b1220;
+  color: var(--bs-light);
   pointer-events: none;
+  z-index: -1;
+}
+
+/* Bootstrap palette overrides (hex + rgb) */
+:root,
+[data-bs-theme="light"] {
+  --bs-primary: #00205b;
+  --bs-primary-rgb: 0, 32, 91;
+
+  --bs-secondary: #a2aaad;
+  --bs-secondary-rgb: 162, 170, 173;
+
+  --bs-dark: #111111;
+  --bs-dark-rgb: 17, 17, 17;
+
+  --bs-light: #f4f4f4;
+  --bs-light-rgb: 244, 244, 244;
+
+  --bs-info: #3a9cbd;
+  --bs-info-rgb: 58, 156, 189;
+}
+
+/* Button fixes */
+.btn-primary {
+  --bs-btn-bg: var(--bs-primary);
+  --bs-btn-border-color: var(--bs-primary);
+  --bs-btn-hover-bg: rgba(var(--bs-primary-rgb), 0.9);
+  --bs-btn-hover-border-color: rgba(var(--bs-primary-rgb), 0.9);
+  --bs-btn-active-bg: rgba(var(--bs-primary-rgb), 1);
+  --bs-btn-active-border-color: rgba(var(--bs-primary-rgb), 1);
+  --bs-btn-disabled-bg: rgba(var(--bs-primary-rgb), 0.65);
+  --bs-btn-disabled-border-color: rgba(var(--bs-primary-rgb), 0.65);
 }
