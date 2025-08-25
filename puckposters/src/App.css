@@ -38,6 +38,8 @@
   height: calc(1920px * var(--pp-scale));
   /* prevent inline layout artifacts */
   display: block;
+  transform: scale(var(--pp-scale));
+  transform-origin: top left;
 }
 
 /* Keep the real poster at 1080×1920, but visually scale it */
@@ -49,8 +51,8 @@
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,0.4);
   font-family: "Inter", sans-serif;
-  transform: scale(var(--pp-scale));
-  transform-origin: top left;
+  /* transform: scale(var(--pp-scale)); */
+  /* transform-origin: top left; */
   display: block;
 }
 
