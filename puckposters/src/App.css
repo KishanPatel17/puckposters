@@ -190,3 +190,27 @@
   .wallpaper-bar .wallpaper-track { animation: none; }
 }
 
+/* Export Button CSS */
+/* Disabled button look */
+.pp-download-btn[disabled] {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+/* Inline rotating spinner */
+.pp-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
+  border: 2px solid currentColor;       /* outer ring color */
+  border-top-color: transparent;         /* gap for the spinner look */
+  border-radius: 50%;
+  animation: pp-spin 0.8s linear infinite;
+  vertical-align: -2px;                  /* tiny optical align with text */
+}
+
+@keyframes pp-spin {
+  to { transform: rotate(360deg); }
+}
+

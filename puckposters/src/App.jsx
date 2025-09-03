@@ -154,6 +154,7 @@ function App() {
   const [timezone, setTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
+  const [isExporting, setIsExporting] = useState(false);
 
   // --- Season months: Sep–Apr only ---
   // AFTER
@@ -249,8 +250,12 @@ function App() {
       ? getMonthLabelFromGameDate(games[0].gameDate)
       : "";
 
+  // Wait function for testing
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
   const handleExport = async () => {
     const node = document.getElementById("poster-export-target");
+    setIsExporting(true);
 
     // Make sure fonts/images are ready so text doesn't render fuzzy/misaligned
     try {
@@ -280,7 +285,9 @@ function App() {
       useCORS: true,
     });
 
+    //await wait(3000);
     download(dataUrl, `${teamCode}-${monthLabel.replace(/\s+/g, "")}.png`);
+    setIsExporting(false);
   };
 
   return (
@@ -291,7 +298,7 @@ function App() {
           <div className="card main-shell bg-primary text-light border-0 shadow-lg rounded-4 ps-5 pe-5 pt-3 pb-5">
             <div className="card-header bg-transparent border-0 text-center">
               <h1 id="puckposters-title-main" className="m-0">
-                <span className="pb-3">PUCKPOSTERS 🏒 TEST 1</span>
+                <span className="pb-3">PUCKPOSTERS 🏒</span>
               </h1>
             </div>
             {/* moving wallpaper strip */}
@@ -413,8 +420,9 @@ function App() {
                       id="export-btn"
                       className="btn btn-primary mb-3"
                       onClick={handleExport}
+                      disabled={isExporting}
                     >
-                      🗃️ Download Poster
+                      {isExporting ? "⏳ Preparing..." : "🗃️ Download Poster"}
                     </button>
                   </div>
                 </div>
