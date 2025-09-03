@@ -134,3 +134,59 @@
   width: fit-content;
 }
 
+/* Moving Wallpapers */
+/* === MOVING WALLPAPER BAR === */
+.wallpaper-bar {
+  position: relative;
+  width: 100%;
+  height: var(--wpbar-height, 110px);
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  /* soft edge fade */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.wallpaper-bar .wallpaper-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  display: flex;
+  gap: 8px;
+  /* infinite scroll */
+  animation: wpbar-scroll var(--wpbar-duration, 40s) linear infinite;
+  will-change: transform;
+}
+
+@keyframes wpbar-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); } /* we render two tracks, so 50% length */
+}
+
+.wallpaper-bar .wallpaper-tile {
+  flex: 0 0 auto;
+  height: 100%;
+  width: calc(var(--wpbar-height, 110px) * 0.75); /* aspect ratio-ish; tweak */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.wallpaper-bar img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.05) contrast(1.02);
+}
+
+/* Pause on hover (desktop) */
+.wallpaper-bar:hover .wallpaper-track { animation-play-state: paused; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .wallpaper-bar .wallpaper-track { animation: none; }
+}
+

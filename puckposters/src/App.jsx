@@ -146,9 +146,10 @@ import PosterPreview from "./components/PosterPreview";
 import { teamMeta } from "./data/teamMeta";
 import { toPng } from "html-to-image";
 import download from "downloadjs";
+import WallpaperBar from "./components/WallpaperBar";
 
 function App() {
-  const [teamCode, setTeamCode] = useState("TOR");
+  const [teamCode, setTeamCode] = useState("LAK");
   const [games, setGames] = useState([]);
   const [timezone, setTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -270,141 +271,145 @@ function App() {
   return (
     <>
       {/* Main layout */}
-      <main className="container my-4 w-fit" id="container-main">
-        <div className="card main-shell bg-primary text-light border-0 shadow-lg rounded-4 ps-5 pe-5 pt-3 pb-5">
-          <div className="card-header bg-transparent border-0 text-center">
-            <h1 id="puckposters-title-main" className="m-0">
-              <span className="pb-3">
-                PUCKPOSTERS 🏒
-              </span>
-            </h1>
-          </div>
-          <div className="row g-4 align-items-center justify-content-center">
-            {/* Controls column */}
-            <div className="col-auto">
-              <div className="card shadow-sm">
-                <div className="card-body">
-                  <h2 className="h5 mb-3">Generate</h2>
-                  {/* Team selector */}
-                  <div className="mb-3">
-                    <label className="form-label">Team</label>
-                    <select
-                      className="form-select"
-                      value={teamCode}
-                      onChange={(e) => setTeamCode(e.target.value)}
-                    >
-                      {teamOptions.map((team) => (
-                        <option key={team.code} value={team.code}>
-                          {team.name}
+      <main >
+        <div className="container my-4 w-fit" id="container-main">
+          <div className="card main-shell bg-primary text-light border-0 shadow-lg rounded-4 ps-5 pe-5 pt-3 pb-5">
+            <div className="card-header bg-transparent border-0 text-center">
+              <h1 id="puckposters-title-main" className="m-0">
+                <span className="pb-3">PUCKPOSTERS 🏒</span>
+              </h1>
+            </div>
+            {/* moving wallpaper strip */}
+            <div className="px-2 pb-3">
+              <WallpaperBar speed={20} height={112} />
+            </div>
+            <div className="row g-4 align-items-center justify-content-center">
+              {/* Controls column */}
+              <div className="col-auto">
+                <div className="card shadow-sm">
+                  <div className="card-body">
+                    <h2 className="h5 mb-3">Generate</h2>
+                    {/* Team selector */}
+                    <div className="mb-3">
+                      <label className="form-label">Team</label>
+                      <select
+                        className="form-select"
+                        value={teamCode}
+                        onChange={(e) => setTeamCode(e.target.value)}
+                      >
+                        {teamOptions.map((team) => (
+                          <option key={team.code} value={team.code}>
+                            {team.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {/* Month selector */}
+                    <div className="mb-3">
+                      <label className="form-label">Month</label>
+                      <select
+                        className="form-select"
+                        value={month}
+                        onChange={(e) => setMonth(e.target.value)}
+                      >
+                        {isInSeasonNow && (
+                          <option value="now">Current Month (auto)</option>
+                        )}
+                        {monthOptions.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {/* Timezone selector */}
+                    <div className="mb-3">
+                      <label className="form-label">Timezone</label>
+                      <select
+                        className="form-select"
+                        value={timezone}
+                        onChange={(e) => setTimezone(e.target.value)}
+                      >
+                        <option value="America/St_Johns">
+                          Newfoundland (NST)
                         </option>
-                      ))}
-                    </select>
-                  </div>
-                  {/* Month selector */}
-                  <div className="mb-3">
-                    <label className="form-label">Month</label>
-                    <select
-                      className="form-select"
-                      value={month}
-                      onChange={(e) => setMonth(e.target.value)}
-                    >
-                      {isInSeasonNow && (
-                        <option value="now">Current Month (auto)</option>
-                      )}
-                      {monthOptions.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
+                        <option value="America/Halifax">Halifax (AST)</option>
+                        <option value="America/Toronto">
+                          New York, Toronto (EST)
                         </option>
-                      ))}
-                    </select>
-                  </div>
-                  {/* Timezone selector */}
-                  <div className="mb-3">
-                    <label className="form-label">Timezone</label>
-                    <select
-                      className="form-select"
-                      value={timezone}
-                      onChange={(e) => setTimezone(e.target.value)}
+                        <option value="America/Chicago">
+                          Chicago, Winnipeg (CST)
+                        </option>
+                        <option value="America/Denver">
+                          Denver, Edmonton (MST)
+                        </option>
+                        <option value="America/Phoenix">
+                          Phoenix (MST, no DST)
+                        </option>
+                        <option value="America/Los_Angeles">
+                          Los Angeles, Vancouver (PST)
+                        </option>
+                        <option value="America/Anchorage">
+                          Anchorage (AKST)
+                        </option>
+                        <option value="America/Adak">Adak (HAST)</option>
+                        <option value="Pacific/Honolulu">Honolulu (HST)</option>
+                        <option value="Europe/London">London (GMT)</option>
+                        <option value="Europe/Paris">
+                          Paris, Berlin, Madrid (CET)
+                        </option>
+                        <option value="Europe/Helsinki">
+                          Helsinki, Riga (EET)
+                        </option>
+                        <option value="Europe/Moscow">Moscow (MSK)</option>
+                        <option value="Asia/Dubai">Dubai (GST)</option>
+                        <option value="Asia/Kolkata">Delhi, Kolkata (IST)</option>
+                        <option value="Asia/Shanghai">
+                          Shanghai, Singapore (CST)
+                        </option>
+                        <option value="Asia/Tokyo">Tokyo (JST)</option>
+                        <option value="Asia/Seoul">Seoul (KST)</option>
+                        <option value="Australia/Perth">Perth (AWST)</option>
+                        <option value="Australia/Adelaide">
+                          Adelaide (ACST)
+                        </option>
+                        <option value="Australia/Sydney">
+                          Sydney, Melbourne (AEST)
+                        </option>
+                        <option value="Pacific/Auckland">Auckland (NZST)</option>
+                        <option value="America/Sao_Paulo">São Paulo (BRT)</option>
+                        <option value="America/Argentina/Buenos_Aires">
+                          Buenos Aires (ART)
+                        </option>
+                        <option value="Africa/Cairo">Cairo (EET)</option>
+                        <option value="Africa/Johannesburg">
+                          Johannesburg (SAST)
+                        </option>
+                      </select>
+                    </div>
+                    {/* Export Button */}
+                    <button
+                      id="export-btn"
+                      className="btn btn-primary mb-3"
+                      onClick={handleExport}
                     >
-                      <option value="America/St_Johns">
-                        Newfoundland (NST)
-                      </option>
-                      <option value="America/Halifax">Halifax (AST)</option>
-                      <option value="America/Toronto">
-                        New York, Toronto (EST)
-                      </option>
-                      <option value="America/Chicago">
-                        Chicago, Winnipeg (CST)
-                      </option>
-                      <option value="America/Denver">
-                        Denver, Edmonton (MST)
-                      </option>
-                      <option value="America/Phoenix">
-                        Phoenix (MST, no DST)
-                      </option>
-                      <option value="America/Los_Angeles">
-                        Los Angeles, Vancouver (PST)
-                      </option>
-                      <option value="America/Anchorage">
-                        Anchorage (AKST)
-                      </option>
-                      <option value="America/Adak">Adak (HAST)</option>
-                      <option value="Pacific/Honolulu">Honolulu (HST)</option>
-                      <option value="Europe/London">London (GMT)</option>
-                      <option value="Europe/Paris">
-                        Paris, Berlin, Madrid (CET)
-                      </option>
-                      <option value="Europe/Helsinki">
-                        Helsinki, Riga (EET)
-                      </option>
-                      <option value="Europe/Moscow">Moscow (MSK)</option>
-                      <option value="Asia/Dubai">Dubai (GST)</option>
-                      <option value="Asia/Kolkata">Delhi, Kolkata (IST)</option>
-                      <option value="Asia/Shanghai">
-                        Shanghai, Singapore (CST)
-                      </option>
-                      <option value="Asia/Tokyo">Tokyo (JST)</option>
-                      <option value="Asia/Seoul">Seoul (KST)</option>
-                      <option value="Australia/Perth">Perth (AWST)</option>
-                      <option value="Australia/Adelaide">
-                        Adelaide (ACST)
-                      </option>
-                      <option value="Australia/Sydney">
-                        Sydney, Melbourne (AEST)
-                      </option>
-                      <option value="Pacific/Auckland">Auckland (NZST)</option>
-                      <option value="America/Sao_Paulo">São Paulo (BRT)</option>
-                      <option value="America/Argentina/Buenos_Aires">
-                        Buenos Aires (ART)
-                      </option>
-                      <option value="Africa/Cairo">Cairo (EET)</option>
-                      <option value="Africa/Johannesburg">
-                        Johannesburg (SAST)
-                      </option>
-                    </select>
+                      🗃️ Download Poster
+                    </button>
                   </div>
-                  {/* Export Button */}
-                  <button
-                    id="export-btn"
-                    className="btn btn-primary mb-3"
-                    onClick={handleExport}
-                  >
-                    🗃️ Download Poster
-                  </button>
                 </div>
               </div>
-            </div>
-            {/* Poster column */}
-            <div className="col-auto d-flex justify-content-center">
-              {games.length > 0 && (
-                <div className="poster-guard">
-                  <PosterPreview
-                    teamCode={teamCode}
-                    games={games}
-                    monthLabel={monthLabel}
-                  />
-                </div>
-              )}
+              {/* Poster column */}
+              <div className="col-auto d-flex justify-content-center">
+                {games.length > 0 && (
+                  <div className="poster-guard">
+                    <PosterPreview
+                      teamCode={teamCode}
+                      games={games}
+                      monthLabel={monthLabel}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
