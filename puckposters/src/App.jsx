@@ -262,7 +262,8 @@ function App() {
       cacheBust: true,
       width: 1080,
       height: 1920,
-      pixelRatio: 2,
+      pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
+      useCORS: true,
     });
 
     download(dataUrl, `${teamCode}-${monthLabel.replace(/\s+/g, "")}.png`);

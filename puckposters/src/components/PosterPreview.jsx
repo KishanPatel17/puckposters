@@ -30,17 +30,15 @@ function PosterPreview({ teamCode, games, monthLabel }) {
       cacheBust: true,
       width: 1080,
       height: 1920,
-      pixelRatio: 2,
+      pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
+      useCORS: true,
     });
 
-    download(
-      dataUrl,
-      `${teamCode}-${monthLabel.replace(/\s+/g, "")}.png`
-    );
+    download(dataUrl, `${teamCode}-${monthLabel.replace(/\s+/g, "")}.png`);
   };
 
   return (
-    <div id="poster-preview">      
+    <div id="poster-preview">
       <div className="poster-frame">
         <div className="poster-wrapper" id="poster-export-target">
           {/* Background image */}
@@ -48,6 +46,7 @@ function PosterPreview({ teamCode, games, monthLabel }) {
             src={meta?.bg}
             alt={`${meta?.name} background`}
             className="poster-bg"
+            crossOrigin="anonymous"
           />
           {/* Floating content over background */}
           <div className="poster-bottom updated-layout">
@@ -84,6 +83,7 @@ function PosterPreview({ teamCode, games, monthLabel }) {
                       src={logoPath}
                       alt={g.opponent}
                       className="opponent-logo"
+                      crossOrigin="anonymous"
                     />
                     <span className="poster-game-date">{g.shortDate}</span>
                     <span className="poster-game-time">{g.localTimeShort}</span>
