@@ -258,7 +258,21 @@ function App() {
     } catch {}
     await new Promise((r) => requestAnimationFrame(r)); // settle layout one frame
 
-    const dataUrl = await toPng(node, {
+    dataUrl = await toPng(node, {
+      cacheBust: true,
+      width: 1080,
+      height: 1920,
+      pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
+      useCORS: true,
+    });
+    dataUrl = await toPng(node, {
+      cacheBust: true,
+      width: 1080,
+      height: 1920,
+      pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
+      useCORS: true,
+    });
+    dataUrl = await toPng(node, {
       cacheBust: true,
       width: 1080,
       height: 1920,
@@ -272,7 +286,7 @@ function App() {
   return (
     <>
       {/* Main layout */}
-      <main >
+      <main>
         <div className="container my-4 w-fit" id="container-main">
           <div className="card main-shell bg-primary text-light border-0 shadow-lg rounded-4 ps-5 pe-5 pt-3 pb-5">
             <div className="card-header bg-transparent border-0 text-center">
@@ -364,7 +378,9 @@ function App() {
                         </option>
                         <option value="Europe/Moscow">Moscow (MSK)</option>
                         <option value="Asia/Dubai">Dubai (GST)</option>
-                        <option value="Asia/Kolkata">Delhi, Kolkata (IST)</option>
+                        <option value="Asia/Kolkata">
+                          Delhi, Kolkata (IST)
+                        </option>
                         <option value="Asia/Shanghai">
                           Shanghai, Singapore (CST)
                         </option>
@@ -377,8 +393,12 @@ function App() {
                         <option value="Australia/Sydney">
                           Sydney, Melbourne (AEST)
                         </option>
-                        <option value="Pacific/Auckland">Auckland (NZST)</option>
-                        <option value="America/Sao_Paulo">São Paulo (BRT)</option>
+                        <option value="Pacific/Auckland">
+                          Auckland (NZST)
+                        </option>
+                        <option value="America/Sao_Paulo">
+                          São Paulo (BRT)
+                        </option>
                         <option value="America/Argentina/Buenos_Aires">
                           Buenos Aires (ART)
                         </option>
