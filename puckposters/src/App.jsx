@@ -258,7 +258,7 @@ function App() {
     } catch {}
     await new Promise((r) => requestAnimationFrame(r)); // settle layout one frame
 
-    dataUrl = await toPng(node, {
+    let dataUrl = await toPng(node, {
       cacheBust: true,
       width: 1080,
       height: 1920,
@@ -291,7 +291,7 @@ function App() {
           <div className="card main-shell bg-primary text-light border-0 shadow-lg rounded-4 ps-5 pe-5 pt-3 pb-5">
             <div className="card-header bg-transparent border-0 text-center">
               <h1 id="puckposters-title-main" className="m-0">
-                <span className="pb-3">PUCKPOSTERS 🏒</span>
+                <span className="pb-3">PUCKPOSTERS 🏒 TEST 1</span>
               </h1>
             </div>
             {/* moving wallpaper strip */}
