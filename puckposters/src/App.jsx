@@ -285,45 +285,9 @@ function App() {
       useCORS: true,
     });
 
-    // Discern between Apple and Other devices \\
-
-    // Get User Agent
-    const ua = navigator.userAgent.toLowerCase();
-    const isIOS = /iPad|iPhone|iPod/.test(ua);
-
     const filename = `${teamCode}-${monthLabel.replace(/\s+/g, "")}.png`;
 
-    if (isIOS) {
-      // Open in a new tab so user can long-press → “Save Image” (to Photos)
-      try {
-        // Convert dataURL -> Blob -> object URL for better compatibility
-        const blob = await (await fetch(dataUrl)).blob();
-        const objectUrl = URL.createObjectURL(blob);
-
-        // Try window.open first (user gesture context from the button click)
-        const win = window.open(objectUrl, "_blank", "noopener");
-        if (!win) {
-          // Popup blocked: fall back to synthetic anchor click
-          const a = document.createElement("a");
-          a.href = objectUrl;
-          a.target = "_blank";
-          a.rel = "noopener";
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }
-
-        // Revoke after a short delay to keep the tab alive
-        setTimeout(() => URL.revokeObjectURL(objectUrl), 10000);
-      } catch (e) {
-        console.error("Open-in-new-tab failed, falling back to download:", e);
-        download(dataUrl, filename);
-      }
-    } else {
-      // Android + desktop: regular download goes to Downloads (and Galleries index it)
-      download(dataUrl, filename);
-      console.log("Non-apple device");
-    }
+    download(dataUrl, filename);
     setIsExporting(false);
   };
 
