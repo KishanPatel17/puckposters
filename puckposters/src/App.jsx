@@ -425,6 +425,23 @@ function App() {
                     >
                       {isExporting ? "⏳ Preparing..." : "🗃️ Download Poster"}
                     </button>
+                    <button
+                      id="bmc-btn"
+                      className="bmc-btn btn mb-3"
+                      onClick={() =>
+                        window.open(
+                          "https://buymeacoffee.com/kishanpatel17",
+                          "_blank",
+                          "noopener,noreferrer"
+                        )
+                      }
+                      aria-label="Buy me a coffee"
+                    >
+                      <img src="coffee-cup.png" alt="Coffee Cup" height="20px" id="coffee-img"></img>
+                      <span>
+                        Buy me a coffee
+                      </span>
+                    </button>
                   </div>
                 </div>
               </div>

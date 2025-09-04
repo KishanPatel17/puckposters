@@ -117,8 +117,12 @@
   font-size: 15px; opacity: .6; color: #fff;
 }
 
-#export-btn, #puckposters-title {
+#export-btn, #puckposters-title, #bmc-btn{
   width:100%;
+}
+
+#bmc-btn{
+  background-color:#FFDD00;
 }
 
 #puckposters-title {
@@ -214,3 +218,29 @@
   to { transform: rotate(360deg); }
 }
 
+/* Buy Me a Coffee button */
+#bmc-btn {
+  display: inline-flex;              /* put contents side by side */
+  align-items: center;               /* vertical centering */
+  justify-content: center;           /* center contents horizontally */
+  gap: 8px;                          /* space between image and text */
+  padding: 0.6rem 1rem;              /* breathing room */
+  background: #ffdd00;               /* Buy Me a Coffee yellow */
+  color: #111;                       /* text color */
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+#bmc-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Coffee image */
+#coffee-img {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
