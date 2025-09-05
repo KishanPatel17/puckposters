@@ -348,7 +348,64 @@ function App() {
 
       // 2) render the CLONED node with transform removed & exact size
       const pixelRatio = Math.min(2, window.devicePixelRatio || 1);
-      const dataUrl = await toPng(node, {
+      var dataUrl = await toPng(node, {
+        cacheBust: true,
+        width: 1080,
+        height: 1920,
+        pixelRatio,
+        useCORS: true,
+        backgroundColor: null,
+        // These styles apply ONLY to the cloned node html-to-image creates
+        style: {
+          width: "1080px",
+          height: "1920px",
+          transform: "none",
+          transformOrigin: "top left",
+          animation: "none",
+          transition: "none",
+        },
+        // Optional: skip anything animated or not needed in export
+        // filter: (n) => !n.classList?.contains("no-export"),
+      });
+      dataUrl = await toPng(node, {
+        cacheBust: true,
+        width: 1080,
+        height: 1920,
+        pixelRatio,
+        useCORS: true,
+        backgroundColor: null,
+        // These styles apply ONLY to the cloned node html-to-image creates
+        style: {
+          width: "1080px",
+          height: "1920px",
+          transform: "none",
+          transformOrigin: "top left",
+          animation: "none",
+          transition: "none",
+        },
+        // Optional: skip anything animated or not needed in export
+        // filter: (n) => !n.classList?.contains("no-export"),
+      });
+      dataUrl = await toPng(node, {
+        cacheBust: true,
+        width: 1080,
+        height: 1920,
+        pixelRatio,
+        useCORS: true,
+        backgroundColor: null,
+        // These styles apply ONLY to the cloned node html-to-image creates
+        style: {
+          width: "1080px",
+          height: "1920px",
+          transform: "none",
+          transformOrigin: "top left",
+          animation: "none",
+          transition: "none",
+        },
+        // Optional: skip anything animated or not needed in export
+        // filter: (n) => !n.classList?.contains("no-export"),
+      });
+      dataUrl = await toPng(node, {
         cacheBust: true,
         width: 1080,
         height: 1920,
