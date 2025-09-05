@@ -256,6 +256,20 @@ function App() {
   // Wait function for testing
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+  const waitForImages = async (root) => {
+    const imgs = Array.from(root.querySelectorAll("img"));
+    await Promise.all(
+      imgs.map((img) => {
+        if ("decode" in img) return img.decode().catch(() => {});
+        if (img.complete) return Promise.resolve();
+        return new Promise((res) => {
+          img.onload = () => res();
+          img.onerror = () => res();
+        });
+      })
+    );
+  };
+
   // const handleExport = async () => {
   //   const node = document.getElementById("poster-export-target");
   //   setIsExporting(true);
@@ -307,6 +321,8 @@ function App() {
       try {
         if (document.fonts?.ready) await document.fonts.ready;
       } catch {}
+      await waitForImages(node);
+      await new Promise((r) => requestAnimationFrame(r));
       await new Promise((r) => requestAnimationFrame(r));
 
       // 2) render the CLONED node with transform removed & exact size
