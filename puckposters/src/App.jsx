@@ -308,6 +308,26 @@ function App() {
   //   setIsExporting(false);
   // };
 
+  const logExportContext = (root) => {
+    const styles = getComputedStyle(root);
+    const imgs = Array.from(root.querySelectorAll("img")).map((i) => ({
+      src: i.currentSrc || i.src,
+      complete: i.complete,
+      natural: `${i.naturalWidth}×${i.naturalHeight}`,
+      crossOrigin: i.crossOrigin || "(none)",
+    }));
+    console.table(imgs);
+    console.log("Export node box:", {
+      w: root.offsetWidth,
+      h: root.offsetHeight,
+      cssW: styles.width,
+      cssH: styles.height,
+      transform: styles.transform,
+      filter: styles.filter,
+      backdropFilter: styles.backdropFilter,
+    });
+  };
+
   const handleExport = async (e) => {
     e?.preventDefault?.();
     if (exportingRef.current) return;
@@ -315,6 +335,7 @@ function App() {
 
     try {
       const node = document.getElementById("poster-export-target");
+      logExportContext(node);
       if (!node) throw new Error("Export target not found");
 
       // 1) settle fonts & layout
