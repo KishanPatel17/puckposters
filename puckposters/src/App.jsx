@@ -147,6 +147,7 @@ import { teamMeta } from "./data/teamMeta";
 import { toPng } from "html-to-image";
 import download from "downloadjs";
 import WallpaperBar from "./components/WallpaperBar";
+import { useRef } from "react";
 
 function App() {
   const [teamCode, setTeamCode] = useState("LAK");
@@ -155,6 +156,8 @@ function App() {
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
   const [isExporting, setIsExporting] = useState(false);
+
+  const exportingRef = useRef(false);
 
   // --- Season months: Sep–Apr only ---
   // AFTER
@@ -253,42 +256,91 @@ function App() {
   // Wait function for testing
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  const handleExport = async () => {
-    const node = document.getElementById("poster-export-target");
-    setIsExporting(true);
+  // const handleExport = async () => {
+  //   const node = document.getElementById("poster-export-target");
+  //   setIsExporting(true);
 
-    // Make sure fonts/images are ready so text doesn't render fuzzy/misaligned
+  //   // Make sure fonts/images are ready so text doesn't render fuzzy/misaligned
+  //   try {
+  //     if (document.fonts?.ready) await document.fonts.ready;
+  //   } catch {}
+  //   await new Promise((r) => requestAnimationFrame(r)); // settle layout one frame
+
+  //   let dataUrl = await toPng(node, {
+  //     cacheBust: true,
+  //     width: 1080,
+  //     height: 1920,
+  //     pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
+  //     useCORS: true,
+  //   });
+  //   dataUrl = await toPng(node, {
+  //     cacheBust: true,
+  //     width: 1080,
+  //     height: 1920,
+  //     pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
+  //     useCORS: true,
+  //   });
+  //   dataUrl = await toPng(node, {
+  //     cacheBust: true,
+  //     width: 1080,
+  //     height: 1920,
+  //     pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
+  //     useCORS: true,
+  //   });
+
+  //   const filename = `${teamCode}-${monthLabel.replace(/\s+/g, "")}.png`;
+
+  //   download(dataUrl, filename);
+  //   setIsExporting(false);
+  // };
+
+  const handleExport = async (e) => {
+    e?.preventDefault?.();
+    if (exportingRef.current) return;
+    exportingRef.current = true;
+
     try {
-      if (document.fonts?.ready) await document.fonts.ready;
-    } catch {}
-    await new Promise((r) => requestAnimationFrame(r)); // settle layout one frame
+      const node = document.getElementById("poster-export-target");
+      if (!node) throw new Error("Export target not found");
 
-    let dataUrl = await toPng(node, {
-      cacheBust: true,
-      width: 1080,
-      height: 1920,
-      pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
-      useCORS: true,
-    });
-    dataUrl = await toPng(node, {
-      cacheBust: true,
-      width: 1080,
-      height: 1920,
-      pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
-      useCORS: true,
-    });
-    dataUrl = await toPng(node, {
-      cacheBust: true,
-      width: 1080,
-      height: 1920,
-      pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
-      useCORS: true,
-    });
+      // 1) settle fonts & layout
+      try {
+        if (document.fonts?.ready) await document.fonts.ready;
+      } catch {}
+      await new Promise((r) => requestAnimationFrame(r));
 
-    const filename = `${teamCode}-${monthLabel.replace(/\s+/g, "")}.png`;
+      // 2) render the CLONED node with transform removed & exact size
+      const pixelRatio = Math.min(2, window.devicePixelRatio || 1);
+      const dataUrl = await toPng(node, {
+        cacheBust: true,
+        width: 1080,
+        height: 1920,
+        pixelRatio,
+        useCORS: true,
+        backgroundColor: null,
+        // These styles apply ONLY to the cloned node html-to-image creates
+        style: {
+          width: "1080px",
+          height: "1920px",
+          transform: "none",
+          transformOrigin: "top left",
+          animation: "none",
+          transition: "none",
+        },
+        // Optional: skip anything animated or not needed in export
+        // filter: (n) => !n.classList?.contains("no-export"),
+      });
 
-    download(dataUrl, filename);
-    setIsExporting(false);
+      const filename = `${teamCode}-${(monthLabel || "Schedule").replace(
+        /\s+/g,
+        ""
+      )}.png`;
+      download(dataUrl, filename);
+    } catch (err) {
+      console.error("Export failed:", err);
+    } finally {
+      exportingRef.current = false;
+    }
   };
 
   return (
@@ -419,6 +471,7 @@ function App() {
                     {/* Export Button */}
                     <button
                       id="export-btn"
+                      type="button"
                       className="btn btn-primary mb-3"
                       onClick={handleExport}
                       disabled={isExporting}
@@ -437,10 +490,13 @@ function App() {
                       }
                       aria-label="Buy me a coffee"
                     >
-                      <img src="coffee-cup.png" alt="Coffee Cup" height="20px" id="coffee-img"></img>
-                      <span>
-                        Buy me a coffee
-                      </span>
+                      <img
+                        src="coffee-cup.png"
+                        alt="Coffee Cup"
+                        height="20px"
+                        id="coffee-img"
+                      ></img>
+                      <span>Buy me a coffee</span>
                     </button>
                   </div>
                 </div>
