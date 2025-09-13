@@ -457,7 +457,7 @@ function App() {
             </div>
             {/* moving wallpaper strip */}
             <div className="px-2 pb-3">
-              <WallpaperBar speed={20} height={112} />
+              <WallpaperBar speed={7} height={112} />
             </div>
             <div className="row g-4 align-items-center justify-content-center">
               {/* Controls column */}
