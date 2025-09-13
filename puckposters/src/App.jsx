@@ -150,13 +150,13 @@ import WallpaperBar from "./components/WallpaperBar";
 import { useRef } from "react";
 
 function App() {
-  const [teamCode, setTeamCode] = useState("LAK");
+  const [teamCode, setTeamCode] = useState("TOR");
   const [games, setGames] = useState([]);
   const [timezone, setTimezone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
   const [isExporting, setIsExporting] = useState(false);
-
+  const [wallpaper_size, setWallPaperSize] = useState("1080x2340");
   const exportingRef = useRef(false);
 
   // --- Season months: Sep–Apr only ---
@@ -332,7 +332,7 @@ function App() {
     e?.preventDefault?.();
     if (exportingRef.current) return;
     exportingRef.current = true;
-
+    setIsExporting(true);
     try {
       const node = document.getElementById("poster-export-target");
       logExportContext(node);
@@ -348,17 +348,21 @@ function App() {
 
       // 2) render the CLONED node with transform removed & exact size
       const pixelRatio = Math.min(2, window.devicePixelRatio || 1);
-      var dataUrl = await toPng(node, {
+      let sizes = wallpaper_size.split("x");
+      let w = Number(sizes[0]);
+      let h = Number(sizes[1]);
+      console.log("Width = " + w + " Height = " + h);
+      let dataUrl = await toPng(node, {
         cacheBust: true,
-        width: 1080,
-        height: 1920,
+        width: w,
+        height: h,
         pixelRatio,
         useCORS: true,
         backgroundColor: null,
         // These styles apply ONLY to the cloned node html-to-image creates
         style: {
-          width: "1080px",
-          height: "1920px",
+          width: `${w}px`,
+          height: `${h}px`,
           transform: "none",
           transformOrigin: "top left",
           animation: "none",
@@ -369,15 +373,15 @@ function App() {
       });
       dataUrl = await toPng(node, {
         cacheBust: true,
-        width: 1080,
-        height: 1920,
+        width: w,
+        height: h,
         pixelRatio,
         useCORS: true,
         backgroundColor: null,
         // These styles apply ONLY to the cloned node html-to-image creates
         style: {
-          width: "1080px",
-          height: "1920px",
+          width: `${w}px`,
+          height: `${h}px`,
           transform: "none",
           transformOrigin: "top left",
           animation: "none",
@@ -388,15 +392,15 @@ function App() {
       });
       dataUrl = await toPng(node, {
         cacheBust: true,
-        width: 1080,
-        height: 1920,
+        width: w,
+        height: h,
         pixelRatio,
         useCORS: true,
         backgroundColor: null,
         // These styles apply ONLY to the cloned node html-to-image creates
         style: {
-          width: "1080px",
-          height: "1920px",
+          width: `${w}px`,
+          height: `${h}px`,
           transform: "none",
           transformOrigin: "top left",
           animation: "none",
@@ -407,15 +411,15 @@ function App() {
       });
       dataUrl = await toPng(node, {
         cacheBust: true,
-        width: 1080,
-        height: 1920,
+        width: w,
+        height: h,
         pixelRatio,
         useCORS: true,
         backgroundColor: null,
         // These styles apply ONLY to the cloned node html-to-image creates
         style: {
-          width: "1080px",
-          height: "1920px",
+          width: `${w}px`,
+          height: `${h}px`,
           transform: "none",
           transformOrigin: "top left",
           animation: "none",
@@ -435,6 +439,8 @@ function App() {
     } finally {
       exportingRef.current = false;
     }
+
+    setIsExporting(false);
   };
 
   return (
@@ -447,6 +453,7 @@ function App() {
               <h1 id="puckposters-title-main" className="m-0">
                 <span className="pb-3">PUCKPOSTERS 🏒</span>
               </h1>
+              <p>NHL Schedule Wallpaper Generator</p>
             </div>
             {/* moving wallpaper strip */}
             <div className="px-2 pb-3">
@@ -562,6 +569,17 @@ function App() {
                         </option>
                       </select>
                     </div>
+                    <div className="mb-3">
+                      <label className="form-label">Wallpaper Size</label>
+                      <select
+                        className="form-select"
+                        value={wallpaper_size}
+                        onChange={(e) => setWallPaperSize(e.target.value)}
+                      >
+                        <option value="1080x1920">1080x1920</option>
+                        <option value="1080x2340">1080x2340 (Mobile Size)</option>
+                      </select>
+                    </div>
                     {/* Export Button */}
                     <button
                       id="export-btn"
@@ -603,6 +621,7 @@ function App() {
                       teamCode={teamCode}
                       games={games}
                       monthLabel={monthLabel}
+                      wallpaper_size={wallpaper_size}
                     />
                   </div>
                 )}

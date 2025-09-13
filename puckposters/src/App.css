@@ -1,42 +1,49 @@
 /* === LOCAL INTER (unchanged) === */
 @font-face {
-  font-family: 'Inter';
-  src: url('/fonts/Inter-Regular.ttf') format('truetype');
-  font-weight: 400; font-style: normal;
+  font-family: "Inter";
+  src: url("/fonts/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
 }
 @font-face {
-  font-family: 'Inter';
-  src: url('/fonts/Inter-Bold.ttf') format('truetype');
-  font-weight: 700; font-style: normal;
+  font-family: "Inter";
+  src: url("/fonts/Inter-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
 }
 @font-face {
-  font-family: 'Inter';
-  src: url('/fonts/Inter-ExtraBold.ttf') format('truetype');
-  font-weight: 800; font-style: normal;
+  font-family: "Inter";
+  src: url("/fonts/Inter-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
 }
 
 /* Make the left control card sticky on desktop (nice UX) */
 @media (min-width: 992px) {
-  .pp-sticky { position: sticky; top: 1.25rem; }
+  .pp-sticky {
+    position: sticky;
+    top: 1.25rem;
+  }
 }
 
 /* ---------- SANDBOX: prevent Bootstrap from leaking into poster ---------- */
 .poster-guard * {
-  all: revert;                          /* reset everything inside poster subtree */
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  all: revert; /* reset everything inside poster subtree */
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+    sans-serif;
   display: block;
 }
 
-
 :root {
-  --pp-scale: 0.25;          /* controls preview size*/
+  --pp-scale: 0.25; /* controls preview size*/
+  --pp-w: 1080px; /* poster width (overridden inline) */
+  --pp-h: 1920px; /* poster height (overridden inline) */
 }
 
 /* The frame defines the *layout* size (shrinks the column) */
 .poster-frame {
-  width: calc(1080px * var(--pp-scale));
-  height: calc(1920px * var(--pp-scale));
-  /* prevent inline layout artifacts */
+  width: calc(var(--pp-w) * var(--pp-scale));
+  height: calc(var(--pp-h) * var(--pp-scale));
   display: block;
   transform: scale(var(--pp-scale));
   transform-origin: top left;
@@ -45,84 +52,153 @@
 /* Keep the real poster at 1080×1920, but visually scale it */
 .poster-wrapper {
   position: relative;
-  width: 1080px;
-  height: 1920px;
+  width: var(--pp-w);
+  height: var(--pp-h);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
   font-family: "Inter", sans-serif;
-  /* transform: scale(var(--pp-scale)); */
-  /* transform-origin: top left; */
   display: block;
 }
 
-/* (Optional) responsive scale presets */
-@media (min-width: 1400px) { :root { --pp-scale: 0.25; } }
-@media (min-width: 1200px) and (max-width: 1399.98px) { :root { --pp-scale: 0.25; } }
-@media (min-width: 992px) and (max-width: 1199.98px)  { :root { --pp-scale: 0.23; } }
-@media (min-width: 768px) and (max-width: 991.98px)   { :root { --pp-scale: 0.21; } }
-@media (max-width: 767.98px)                           { :root { --pp-scale: 0.20; } }
+@media (min-width: 1400px) {
+  :root {
+    --pp-scale: 0.25;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  :root {
+    --pp-scale: 0.25;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  :root {
+    --pp-scale: 0.23;
+  }
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
+  :root {
+    --pp-scale: 0.21;
+  }
+}
+@media (max-width: 767.98px) {
+  :root {
+    --pp-scale: 0.2;
+  }
+}
 
 /* Background image */
 .poster-wrapper img.poster-bg {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover; z-index: 0;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
 }
 
 /* === BOTTOM OVERLAY === */
 .poster-bottom {
-  position: absolute; bottom: 0; width: 100%;
-  padding: 1rem 2rem 320px;  /* extra bottom for iPhone nav */
-  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 1rem 2rem 320px; /* extra bottom for iPhone nav */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   background: none;
 }
 
 .poster-bottom.updated-layout {
-  left: 0; width: 1080px; box-sizing: border-box;
+  left: 0;
+  width: var(--pp-w);
+  box-sizing: border-box;
 }
 
 /* === MONTH + LEGEND ROW === */
-.poster-month-row { display: flex; align-items: center; gap: 1rem; }
+.poster-month-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 .poster-month-pill {
-  padding: .6rem 1.2rem; background: rgba(255,255,255,.9); color: #000;
-  font-weight: 900; font-size: 1.5rem; border-radius: 8px;
-  text-transform: uppercase; letter-spacing: 1px;
+  padding: 0.6rem 1.2rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  font-weight: 900;
+  font-size: 1.5rem;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 .poster-legend-chip {
-  padding: .5rem 1rem; font-size: 1.5rem; font-weight: 700; border-radius: 6px; white-space: nowrap;
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-radius: 6px;
+  white-space: nowrap;
 }
 
 /* === GAMES GRID (7 columns) === */
 .poster-game-grid {
-  display: grid; grid-template-columns: repeat(7, 1fr);
-  gap: 16px; width: 100%; box-sizing: border-box; justify-items: center;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  justify-items: center;
 }
 
 /* === GAME TILES === */
 .poster-game-tile {
-  width: 100%; padding: 16px; border-radius: 12px;
-  background: rgba(255,255,255,0.9);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  font-size: 12px; line-height: 1.2; box-sizing: border-box;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 1.2;
+  box-sizing: border-box;
 }
-.poster-game-tile img { width: 48px; height: 48px; margin-bottom: 8px; }
-.poster-game-date { font-weight: 700; font-size: 16px; margin-bottom: 6px; }
-.poster-game-time { font-size: 15px; opacity: .8; }
+.poster-game-tile img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+}
+.poster-game-date {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.poster-game-time {
+  font-size: 15px;
+  opacity: 0.8;
+}
 
 /* === FOOTER === */
 .poster-footer {
-  position: absolute; bottom: 3rem; width: 100%; text-align: center;
-  font-size: 15px; opacity: .6; color: #fff;
+  position: absolute;
+  bottom: 3rem;
+  width: 100%;
+  text-align: center;
+  font-size: 15px;
+  opacity: 0.6;
+  color: #fff;
 }
 
-#export-btn, #puckposters-title, #bmc-btn{
-  width:100%;
+#export-btn,
+#puckposters-title,
+#bmc-btn {
+  width: 100%;
 }
 
-#bmc-btn{
-  background-color:#FFDD00;
+#bmc-btn {
+  background-color: #ffdd00;
 }
 
 #puckposters-title {
@@ -146,10 +222,22 @@
   height: var(--wpbar-height, 110px);
   overflow: hidden;
   border-radius: 10px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.04);
   /* soft edge fade */
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-          mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
 }
 
 .wallpaper-bar .wallpaper-track {
@@ -165,8 +253,12 @@
 }
 
 @keyframes wpbar-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); } /* we render two tracks, so 50% length */
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  } /* we render two tracks, so 50% length */
 }
 
 .wallpaper-bar .wallpaper-tile {
@@ -175,7 +267,7 @@
   width: calc(var(--wpbar-height, 110px) * 0.75); /* aspect ratio-ish; tweak */
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 .wallpaper-bar img {
@@ -187,11 +279,15 @@
 }
 
 /* Pause on hover (desktop) */
-.wallpaper-bar:hover .wallpaper-track { animation-play-state: paused; }
+.wallpaper-bar:hover .wallpaper-track {
+  animation-play-state: paused;
+}
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .wallpaper-bar .wallpaper-track { animation: none; }
+  .wallpaper-bar .wallpaper-track {
+    animation: none;
+  }
 }
 
 /* Export Button CSS */
@@ -207,26 +303,28 @@
   width: 1em;
   height: 1em;
   margin-right: 0.5em;
-  border: 2px solid currentColor;       /* outer ring color */
-  border-top-color: transparent;         /* gap for the spinner look */
+  border: 2px solid currentColor; /* outer ring color */
+  border-top-color: transparent; /* gap for the spinner look */
   border-radius: 50%;
   animation: pp-spin 0.8s linear infinite;
-  vertical-align: -2px;                  /* tiny optical align with text */
+  vertical-align: -2px; /* tiny optical align with text */
 }
 
 @keyframes pp-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Buy Me a Coffee button */
 #bmc-btn {
-  display: inline-flex;              /* put contents side by side */
-  align-items: center;               /* vertical centering */
-  justify-content: center;           /* center contents horizontally */
-  gap: 8px;                          /* space between image and text */
-  padding: 0.6rem 1rem;              /* breathing room */
-  background: #ffdd00;               /* Buy Me a Coffee yellow */
-  color: #111;                       /* text color */
+  display: inline-flex; /* put contents side by side */
+  align-items: center; /* vertical centering */
+  justify-content: center; /* center contents horizontally */
+  gap: 8px; /* space between image and text */
+  padding: 0.6rem 1rem; /* breathing room */
+  background: #ffdd00; /* Buy Me a Coffee yellow */
+  color: #111; /* text color */
   font-weight: 600;
   border: none;
   cursor: pointer;
@@ -235,7 +333,7 @@
 
 #bmc-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Coffee image */

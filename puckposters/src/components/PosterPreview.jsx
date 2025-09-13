@@ -1,13 +1,16 @@
-// src/components/PosterPreview.jsx
-import React from "react";
 import { teamMeta } from "../data/teamMeta";
-import { toPng } from "html-to-image";
-import download from "downloadjs";
 
-function PosterPreview({ teamCode, games, monthLabel }) {
+function PosterPreview({ teamCode, games, monthLabel, wallpaper_size }) {
   const meta = teamMeta[teamCode];
   const primary = meta?.primary || "#000";
   const secondary = meta?.secondary || "#fff";
+  const size = wallpaper_size;
+  const [w, h] = (size || "1080x1920").split("x").map(Number);
+  //const bgSrc = meta?.bg?.[size] || meta?.bg?.["1080x1920"]; // fallback\
+  const bgSrc = teamCode === "TOR" ? meta?.bg?.[size] : meta?.bg?.["1080x1920"];
+  console.log("bgSrc = " + bgSrc);
+
+  console.log("wallpaper_size = " + size);
 
   // Legend chip styles
   const homeStyle = { background: secondary, color: primary };
@@ -17,33 +20,16 @@ function PosterPreview({ teamCode, games, monthLabel }) {
     return `/logos/${teamCode}.${teamCode === "UTA" ? "png" : "svg"}`;
   }
 
-  const handleExport = async () => {
-    const node = document.getElementById("poster-export-target");
-
-    // Make sure fonts/images are ready so text doesn't render fuzzy/misaligned
-    try {
-      if (document.fonts?.ready) await document.fonts.ready;
-    } catch {}
-    await new Promise((r) => requestAnimationFrame(r)); // settle layout one frame
-
-    const dataUrl = await toPng(node, {
-      cacheBust: true,
-      width: 1080,
-      height: 1920,
-      pixelRatio: window.devicePixelRatio > 2 ? 2 : 1,
-      useCORS: true,
-    });
-
-    download(dataUrl, `${teamCode}-${monthLabel.replace(/\s+/g, "")}.png`);
-  };
-
   return (
     <div id="poster-preview">
-      <div className="poster-frame">
+      <div
+        className="poster-frame"
+        style={{ "--pp-w": `${w}px`, "--pp-h": `${h}px` }}
+      >
         <div className="poster-wrapper" id="poster-export-target">
           {/* Background image */}
           <img
-            src={meta?.bg}
+            src={bgSrc}
             alt={`${meta?.name} background`}
             className="poster-bg"
             crossOrigin="anonymous"

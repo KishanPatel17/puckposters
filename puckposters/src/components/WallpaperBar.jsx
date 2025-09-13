@@ -6,7 +6,7 @@ export default function WallpaperBar({ speed = 20, height = 110 }) {
   // Collect wallpaper URLs from teamMeta
   const wallpapers = useMemo(() => {
     const urls = Object.values(teamMeta)
-      .map((t) => t.bg)
+      .map((t) => t.bg["1080x1920"])
       .filter(Boolean);
     // Optional: de-dupe
     return Array.from(new Set(urls));
