@@ -31,9 +31,16 @@ export function convertScheduleToTimezone(games, timezone, teamCode) {
 
     const isHome = game.homeTeam.abbrev === teamCode;
     const opponent = isHome ? game.awayTeam : game.homeTeam;
-    const opponentName = `${opponent.placeName.default} ${
-      opponent.commonName?.default ?? ""
-    }`.trim();
+    // const opponentName = `${opponent.placeName.default} ${
+    //   opponent.commonName?.default ?? ""
+    // }`.trim();
+    const opponentName = [
+      opponent?.placeName?.default,
+      opponent?.commonName?.default,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
     const opponentLogo = opponent.logo || opponent.darkLogo || null;
     const abbrev = opponent.abbrev;
 
