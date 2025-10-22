@@ -440,6 +440,17 @@ function App() {
       exportingRef.current = false;
     }
 
+    try {
+      await fetch("/api/increment-download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ team: teamCode, month: monthLabel }),
+      });
+      console.log("✅ Download tracked successfully");
+    } catch (err) {
+      console.warn("⚠️ Failed to track download:", err);
+    }
+
     setIsExporting(false);
   };
 
@@ -577,7 +588,9 @@ function App() {
                         onChange={(e) => setWallPaperSize(e.target.value)}
                       >
                         <option value="1080x1920">1080x1920</option>
-                        <option value="1080x2340">1080x2340 (Mobile Size)</option>
+                        <option value="1080x2340">
+                          1080x2340 (Mobile Size)
+                        </option>
                       </select>
                     </div>
                     {/* Export Button */}
