@@ -9,7 +9,7 @@ export async function onRequestPost(context) {
     const month = body.month || "UNKNOWN";
 
     // Simple Key
-    const key = `${team}-$month`;
+    const key = `${team}-${month}`;
     const totalKey = "global-total";
 
     // Read the existing counts
