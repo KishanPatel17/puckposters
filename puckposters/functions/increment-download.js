@@ -3,6 +3,7 @@ export async function onRequestPost(context) {
 
   try {
     // Parse the JSON
+    console.log("DEBUG STEP: In the onRequestPost function in Increment Download.js");
     const body = await request.json();
     const team = body.team || "UNKNOWN";
     const month = body.month || "UNKNOWN";
@@ -17,6 +18,8 @@ export async function onRequestPost(context) {
       (await env.DOWNLOADS_KV.get(totalKey)) || "0",
       10
     );
+
+    console.log("Read existing counts PrevCount = " + prevCount + " prevTotal = " + prevTotal);
 
     // Increment both
     const newCount = prevCount + 1;

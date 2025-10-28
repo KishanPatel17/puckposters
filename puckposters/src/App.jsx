@@ -440,6 +440,8 @@ function App() {
       exportingRef.current = false;
     }
 
+    console.log("DEBUG STEP: done trying exporting");
+
     try {
       await fetch("/api/increment-download", {
         method: "POST",
